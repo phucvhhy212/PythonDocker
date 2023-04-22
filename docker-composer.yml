@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  flask-app-container:
+    build: 
+      context: .
+    container_name: flask-app-container
+    command: "python -m flask run --host=0.0.0.0"
+    ports:
+      - 5000:5000
+    working_dir: /app
+    depends_on:
+      postgres: 
+        condition: service_started
+
+  
+  postgres:
+    image: postgres:15.2-alpine
+    container_name: postgres-container
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/data/postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /data/postgres
+      POSTGRES_DB: testDb
+    restart: unless-stopped
+
+volumes:
+  postgres: {}  
+    
