@@ -7,7 +7,7 @@ services:
     command: "python -m flask run --host=0.0.0.0"
     ports:
       - 5000:5000
-    working_dir: /app
+    working_dir: /project
     depends_on:
       postgres: 
         condition: service_started

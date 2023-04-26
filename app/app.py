@@ -67,4 +67,4 @@ def create():
         conn.close()
         return redirect('../products',302)
 
-    return render_template('create.html')
+    return render_template('../templates/create.html')
