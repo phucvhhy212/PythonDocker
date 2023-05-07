@@ -7,7 +7,7 @@ services:
     command: "python -m flask run --host=0.0.0.0"
     ports:
       - 5000:5000
-    working_dir: /project
+    working_dir: /project/app
     depends_on:
       postgres: 
         condition: service_started
@@ -21,10 +21,10 @@ services:
     volumes:
       - postgres:/data/postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
       PGDATA: /data/postgres
-      POSTGRES_DB: testDb
+      POSTGRES_DB: ${DATABASE}
     restart: unless-stopped
 
 volumes:

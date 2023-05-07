@@ -1,32 +1,40 @@
 import json
 from flask import Flask, request, Response
-from flask_sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base,sessionmaker
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
-import psycopg2
+from dotenv import load_dotenv
 
-# conn = psycopg2.connect("postgresql://postgres:123456@localhost:5432/postgres")
-# url = "postgresql://{user}:{passwd}@{host}:{port}/{db}".format(
-#             user=os.environ['USER'], passwd=os.environ['PASSWORD'], host=os.environ['HOST'], port=os.environ['PORT'], db=os.environ['DATABASE']
-#         )
 
-url = "postgresql://postgres:123456@localhost:5432/test"
+load_dotenv()
+
+url = "postgresql://{user}:{passwd}@{host}:{port}/{db}".format(
+            user=os.getenv('USER'), passwd=os.getenv('PASSWORD'), host=os.getenv('HOST'), port=os.getenv('PORT'), db=os.getenv('DATABASE')
+        )
+# url = "postgresql://postgres:123456@postgres:5432/test"
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+migrate = Migrate(app,db)
 
 
-Base = declarative_base()
-
-class Products(Base):
+class Products(db.Model):
     __tablename__ = 'products'
-    id = Column(Integer,primary_key=True,autoincrement=True)
-    name = Column(String(250),nullable=False)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    name = db.Column(db.String(250),nullable=False)
 
 engine = create_engine(url)
-Base.metadata.create_all(engine)
+
 Session = sessionmaker()
 Session.configure(bind=engine)
 session = Session()
+
+@app.route("/")
+def index():
+    return "Hello"
 
 @app.route('/products')
 def getProducts():
@@ -44,7 +52,7 @@ def getProducts():
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
-@app.route('/create',methods = 'POST')
+@app.route('/create',methods = ['POST'])
 def create():
     row_headers =  [column.key for column in Products.__table__.columns]
     json_data = []
@@ -56,4 +64,3 @@ def create():
     resp = Response(json.dumps(json_data),200,mimetype='application/json')
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
-app.run()
