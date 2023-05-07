@@ -1,17 +1,30 @@
+
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
 
-from config import Config
+db = SQLAlchemy()
+load_dotenv()
+url = "postgresql://{user}:{passwd}@{host}:{port}/{db}".format(
+            user=os.getenv('USER'), passwd=os.getenv('PASSWORD'), host=os.getenv('HOST'), port=os.getenv('PORT'), db=os.getenv('DATABASE')
+        )
 
-# def create_app(config_class=Config):
-#     app = Flask(__name__)
-#     app.config.from_object(config_class)
+engine = create_engine(url)
+Session = sessionmaker()
+Session.configure(bind=engine)
+session = Session()
 
-#     # Initialize Flask extensions here
-
-#     # Register blueprints here
-
-#     @app.route('/test/')
-#     def test_page():
-#         return '<h1>Testing the Flask Application Factory Pattern</h1>'
-
-#     return app
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = url
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    migrate = Migrate(app, db)
+    from .models import Products
+    from .views import views
+    app.register_blueprint(views,url_prefix='/')
+    return app

@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 
-ENV FLASK_APP=app.py
+ENV FLASK_APP=main.py
 ENV PYTHONPATH=/project
 CMD ["python", "-m", "flask", "run"] 
 
