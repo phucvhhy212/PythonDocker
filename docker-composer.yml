@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.1'
 services:
   flask-app-container:
     build: 
@@ -21,7 +21,7 @@ services:
     volumes:
       - postgres:/data/postgres
     environment:
-      POSTGRES_USER: ${USER}
+      POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PASSWORD}
       PGDATA: /data/postgres
       POSTGRES_DB: ${DATABASE}
