@@ -6,11 +6,8 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY . /project
 
-
-ENV FLASK_APP=main.py
-ENV PYTHONPATH=/project
 CMD ["python", "-m", "flask", "run"] 
 
 

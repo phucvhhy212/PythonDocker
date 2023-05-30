@@ -1,16 +1,17 @@
-version: '2.1'
+version: '2.2'
 services:
   flask-app-container:
     build: 
       context: .
     container_name: flask-app-container
-    command: "python -m flask run --host=0.0.0.0"
+    environment:
+      FLASK_APP: main.py
     ports:
       - 5000:5000
-    working_dir: /project
     depends_on:
       postgres: 
         condition: service_started
+    
 
   
   postgres:
