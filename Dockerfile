@@ -8,6 +8,6 @@ RUN pip install -r requirements.txt
 
 COPY . /project
 
-CMD ["python", "-m", "flask", "run"] 
+
 
 
