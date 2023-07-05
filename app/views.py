@@ -1,8 +1,16 @@
 import json
 from flask import Blueprint, Response, request
-from . import session
+
 from .models import Products
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 views = Blueprint('views',__name__)
+
+
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+Session = sessionmaker()
+Session.configure(bind=engine)
+session = Session()
 
 @views.route("/")
 def index():
