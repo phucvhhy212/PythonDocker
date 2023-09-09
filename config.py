@@ -6,7 +6,7 @@ import json
 
 def get_secret():
 
-    secret_name = "my-flask-secret"
+    secret_name = "custom-rds"
     region_name = "ap-southeast-1"
     
 
@@ -14,9 +14,7 @@ def get_secret():
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
-        region_name=region_name,
-        aws_access_key_id='AKIA5GO2RRGUTDP34HQU',
-        aws_secret_access_key='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'
+        region_name=region_name
     )
 
     try:

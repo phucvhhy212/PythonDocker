@@ -4,10 +4,11 @@ from flask import Blueprint, Response, request
 from .models import Products
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from config import Config 
 views = Blueprint('views',__name__)
 
+engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker()
 Session.configure(bind=engine)
 session = Session()

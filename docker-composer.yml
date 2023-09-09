@@ -7,26 +7,5 @@ services:
       FLASK_APP: main.py
     ports:
       - 5000:5000
-    # depends_on:
-    #   postgres: 
-    #     condition: service_started
     command: "python -m flask run --host 0.0.0.0"
-
-  
-  # postgres:
-  #   image: postgres:15.2-alpine
-  #   container_name: postgres-container
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - postgres:/data/postgres
-  #   environment:
-  #     POSTGRES_USER: ${PG_USER}
-  #     POSTGRES_PASSWORD: ${PASSWORD}
-  #     PGDATA: /data/postgres
-  #     POSTGRES_DB: ${DATABASE}
-  #   restart: unless-stopped
-
-# volumes:
-  # postgres: {}  
     
